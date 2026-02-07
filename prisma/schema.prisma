@@ -9,12 +9,152 @@ datasource db {
   provider = "postgresql"
 }
 
-// Example model - you can modify or remove this
+// User/Customer model
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   name      String?
+  phone     String?
+  address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
+  orders       Order[]
+  reservations Reservation[]
+}
+
+// Menu Category
+model Category {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  slug        String     @unique
+  description String?
+  order       Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  menuItems MenuItem[]
+}
+
+// Menu Item (Pizzas, Drinks, Sides, etc.)
+model MenuItem {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  ingredients String?
+  price       Decimal  @db.Decimal(10, 2)
+  image       String?
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  // Attributes
+  isVegetarian Boolean @default(false)
+  isSpicy      Boolean @default(false)
+  isBestseller Boolean @default(false)
+  spiceLevel   Int     @default(0)
+  tags         String[] // Array of tags like ['vegetarian', 'classic', 'signature']
+  
+  // Status
+  isAvailable Boolean @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  orderItems OrderItem[]
+  
+  @@index([categoryId])
+  @@index([isBestseller])
+}
+
+// Order model
+model Order {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Customer info (for guest orders)
+  customerName  String?
+  customerEmail String?
+  customerPhone String?
+  deliveryAddress String?
+  
+  // Order details
+  status      OrderStatus @default(PENDING)
+  totalAmount Decimal     @db.Decimal(10, 2)
+  notes       String?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  orderItems OrderItem[]
+  
+  @@index([userId])
+  @@index([status])
+}
+
+// Order Item (individual items in an order)
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+  
+  quantity   Int
+  unitPrice  Decimal  @db.Decimal(10, 2)
+  subtotal   Decimal  @db.Decimal(10, 2)
+  
+  specialInstructions String?
+  
+  createdAt DateTime @default(now())
+  
+  @@index([orderId])
+  @@index([menuItemId])
+}
+
+// Reservation model
+model Reservation {
+  id        String         @id @default(uuid())
+  userId    String?
+  user      User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  // Guest info
+  guestName  String
+  guestEmail String
+  guestPhone String
+  
+  // Reservation details
+  reservationDate DateTime
+  numberOfGuests  Int
+  status          ReservationStatus @default(PENDING)
+  specialRequests String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+  @@index([reservationDate])
+  @@index([status])
+}
+
+// Enums
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
+
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  SEATED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
 }
 
