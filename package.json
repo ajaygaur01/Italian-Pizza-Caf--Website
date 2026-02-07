@@ -9,7 +9,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "prisma:push": "prisma db push"
+    "prisma:push": "prisma db push",
+    "prisma:seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -76,6 +77,7 @@
     "@vitejs/plugin-react": "4.7.0",
     "prisma": "^5.20.0",
     "tailwindcss": "4.1.12",
+    "tsx": "^4.19.2",
     "vite": "6.3.5"
   },
   "peerDependencies": {
