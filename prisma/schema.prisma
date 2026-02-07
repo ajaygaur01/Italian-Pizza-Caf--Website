@@ -62,6 +62,7 @@ model MenuItem {
   
   orderItems OrderItem[]
   
+  @@unique([name, categoryId])
   @@index([categoryId])
   @@index([isBestseller])
 }
