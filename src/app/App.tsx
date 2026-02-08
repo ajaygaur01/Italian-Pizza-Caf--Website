@@ -11,6 +11,7 @@ import { Footer } from '@/app/components/Footer';
 import { MenuPage } from '@/app/pages/MenuPage';
 import { AboutChefPage } from '@/app/pages/AboutChefPage';
 import { ReservationPage } from '@/app/pages/ReservationPage';
+import { ContactPage } from '@/app/pages/ContactPage';
 
 function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -67,13 +68,21 @@ function Navigation() {
           </Link>
           <Link 
             to="/reservation" 
+            className={`transition-colors ${
+              isScrolled ? 'text-[#4A4A4A] hover:text-[#D32F2F]' : 'text-white/80 hover:text-white'
+            }`}
+          >
+            Reserve
+          </Link>
+          <Link 
+            to="/contact" 
             className={`px-6 py-2 transition-colors ${
               isScrolled 
                 ? 'bg-[#D32F2F] text-white hover:bg-[#B71C1C]' 
                 : 'bg-white/10 backdrop-blur-sm text-white hover:bg-white/20'
             }`}
           >
-            Reserve
+            Contact
           </Link>
         </div>
       </div>
@@ -105,6 +114,7 @@ export default function App() {
           <Route path="/menu" element={<MenuPage />} />
           <Route path="/about-chef" element={<AboutChefPage />} />
           <Route path="/reservation" element={<ReservationPage />} />
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </div>
     </BrowserRouter>
