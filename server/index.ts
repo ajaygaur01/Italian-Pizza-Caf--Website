@@ -2,6 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import { contactRouter } from './routes/contact.js';
+import { categoriesRouter } from './routes/categories.js';
+import { menuRouter } from './routes/menu.js';
+import { ordersRouter } from './routes/orders.js';
+import { reservationsRouter } from './routes/reservations.js';
+import { usersRouter } from './routes/users.js';
 
 dotenv.config();
 
@@ -23,6 +28,11 @@ app.get('/health', (req, res) => {
 
 // API Routes
 app.use('/api/contact', contactRouter);
+app.use('/api/categories', categoriesRouter);
+app.use('/api/menu', menuRouter);
+app.use('/api/orders', ordersRouter);
+app.use('/api/reservations', reservationsRouter);
+app.use('/api/users', usersRouter);
 
 // Error handling middleware
 app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {

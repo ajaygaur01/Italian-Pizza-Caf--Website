@@ -94,7 +94,12 @@ Use two terminals (or a process manager) to run both frontend and backend at onc
 │   ├── lib/
 │   │   └── prisma.ts    # Prisma client singleton
 │   └── routes/
-│       └── contact.ts   # Contact form API
+│       ├── contact.ts      # Contact form API
+│       ├── categories.ts   # Menu categories
+│       ├── menu.ts         # Menu items
+│       ├── orders.ts       # Orders
+│       ├── reservations.ts # Reservations
+│       └── users.ts        # Users
 ├── src/
 │   ├── app/
 │   │   ├── App.tsx
@@ -135,6 +140,47 @@ Base URL (dev): `http://localhost:3001`
 
 - **GET** `/health`  
   Returns `{ status: "ok", timestamp: "..." }`.
+
+### Categories
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/categories` | List all categories (with item count) |
+| GET | `/api/categories/slug/:slug` | Get category by slug (e.g. `classic`) with menu items |
+| GET | `/api/categories/:id` | Get category by id with menu items |
+
+### Menu
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/menu` | List menu items. Query: `categoryId`, `categorySlug`, `vegetarian`, `spicy`, `bestseller`, `available`, `page`, `limit` |
+| GET | `/api/menu/:id` | Get single menu item |
+
+### Orders
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/orders` | Create order (body: `items[]`, optional `userId`, `customerName`, `customerEmail`, `customerPhone`, `deliveryAddress`, `notes`) |
+| GET | `/api/orders` | List orders. Query: `status`, `page`, `limit` |
+| GET | `/api/orders/:id` | Get order by id |
+| PATCH | `/api/orders/:id/status` | Update order status (body: `{ "status": "CONFIRMED" }`) |
+
+### Reservations
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/reservations` | Create reservation (body: `guestName`, `guestEmail`, `guestPhone`, `reservationDate`, `numberOfGuests`, optional `specialRequests`, `userId`) |
+| GET | `/api/reservations` | List reservations. Query: `status`, `from`, `to`, `page`, `limit` |
+| GET | `/api/reservations/:id` | Get reservation by id |
+| PATCH | `/api/reservations/:id/status` | Update reservation status (body: `{ "status": "CONFIRMED" }`) |
+
+### Users
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users` | List users. Query: `page`, `limit` |
+| GET | `/api/users/:id` | Get user by id |
+| POST | `/api/users` | Create user (body: `email`, optional `name`, `phone`, `address`) |
 
 ### Contact (Get in Touch)
 
