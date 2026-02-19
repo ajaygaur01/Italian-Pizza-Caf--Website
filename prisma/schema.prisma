@@ -47,14 +47,14 @@ model MenuItem {
   categoryId  String
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   
-  
+  // Attributes
   isVegetarian Boolean @default(false)
   isSpicy      Boolean @default(false)
   isBestseller Boolean @default(false)
   spiceLevel   Int     @default(0)
   tags         String[] // Array of tags like ['vegetarian', 'classic', 'signature']
   
-  
+  // Status
   isAvailable Boolean @default(true)
   
   createdAt DateTime @default(now())
